@@ -7,6 +7,13 @@ my $vanSpaces = 5;
 my $carSpaces = 5;
 my $bikeSpaces = 3;
 
+my @allowedWords = (
+	'Car',
+	'Van',
+	'Bike',
+	'park',
+	'leave'
+);
 our %spaces = (
 	#tracking free parking spots per vehichle type
 	'Van' => 0,
@@ -15,13 +22,12 @@ our %spaces = (
 );
 
 sub park {
-	my ($type) = @_;
+	our ($type) = @_;
 	$spaces{$type}++;
-#	print Dumper(\%spaces);
 }
 
 sub leave {
-	my ($type) = @_;
+	our ($type) = @_;
 	$spaces{$type}--;
 #	print Dumper(\%spaces);
 }
@@ -33,14 +39,29 @@ sub displayStats {
 	our $bikeNum = $bikeSpaces - $spaces{'Bike'};
 
 #UX
+	#print Dumper(\%spaces);
 	print "\n\nHello and welcome to Parking Simulator!\n\n";
 	print "We currently have room for $vanNum vans, $carNum cars, and $bikeNum bikes.\n"; 
 	
 }
 
 sub testSub {
-	my ($type) = @_;
+	our ($type) = @_;
 	return($type);
+}
+
+sub verifyInput {
+	our ($userInput) = @_;
+	my $matched = 0;
+	my $filteredWord;
+	foreach my $word (@allowedWords) {
+		if  ( $userInput =~ /$word/i ) {
+			$matched++;
+			$filteredWord = $word;	
+		}
+	}
+	my @done = ($matched, $filteredWord);
+return(@done);
 }
 
 #print Dumper(\%spaces);
@@ -54,11 +75,28 @@ sub main {
 	print "Are you here to park or leave?\n";
 	$choice1 = <>;
 	chomp($choice1);
+
+	my $verified = 0;
+	while(!$verified) {
+		my @values = verifyInput($choice1);
+		if ($values[0] eq 1) {
+			$choice1 = $values[1];
+			$verified = $values[0];
+		}
+	}
 	
 	if ($choice1 =~ 'park') { 
 		print "Oh this is wonderful! We're here for parkers, what vehicle do you have; Car, Van, or Bike?\n";
 		$choice2 = <>;
 		chomp($choice2);
+		my $verified = 0;
+	        while(!$verified) {
+	                my @values = verifyInput($choice2);
+	                if ($values[0] eq 1) {
+	                        $choice2 = $values[1];
+	                        $verified = $values[0];
+	                }
+	        }
 		park($choice2);
 		};
 
@@ -66,23 +104,15 @@ sub main {
 		print "Now you're a driver and not a parker. Ugh, what kind of vehicle do you have, Car Van or Bike?\n";
 		$choice2 = <>;
 		chomp($choice2);
+		my $verified = 0;
+                while(!$verified) {
+                        my @values = verifyInput($choice2);
+                        if ($values[0] eq 1) { 
+                                $choice2 = $values[1];
+                                $verified = $values[0];
+                        }       
+                }   
 		leave($choice2);
 		};
 };
 
-# while(1) {main();}
-
-
-#make a parking lot spot tracker, track big spots and small spots available.
-
-#I dont need a class for a single parking lot, but i will for two
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
