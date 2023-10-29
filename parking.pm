@@ -1,6 +1,7 @@
 use strict;
 use warnings;
 use Data::Dumper;
+use lib ".";
 
 #configuration
 my $vanSpaces = 5;
@@ -21,10 +22,10 @@ our %spaces = (
 	'Bike' => 0,
 ); #TODO: add space configuration to these classes in order to ease 'isFull' sub
 
-sub isFull {
-	our ($type) = @_;
-	if ($spaces{$type} 
-}
+#sub isFull {
+#	our ($type) = @_;
+#	if ($spaces{$type} 
+#}
 
 sub park {
 	our ($type) = @_;

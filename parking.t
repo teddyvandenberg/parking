@@ -1,6 +1,7 @@
 use strict;
 use warnings;
 use Test::Simple tests => 11;
+use lib ".";
 
 use parking;
 
