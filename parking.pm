@@ -17,10 +17,19 @@ my @allowedWords = (
 );
 our %spaces = (
 	#tracking free parking spots per vehichle type
-	'Van' => 0,
-	'Car' => 0,
-	'Bike' => 0,
-); #TODO: add space configuration to these classes in order to ease 'isFull' sub
+	'Van' => {
+		'totalSpaces' => $vanSpaces,
+		'usedSpaces' => 0,
+	},
+	'Car' => {
+                'totalSpaces' => $carSpaces,
+                'usedSpaces' => 0,
+        }, 
+	'Bike' => {
+                'totalSpaces' => $bikeSpaces,
+                'usedSpaces' => 0,
+        }, 
+);
 
 #sub isFull {
 #	our ($type) = @_;
@@ -29,20 +38,20 @@ our %spaces = (
 
 sub park {
 	our ($type) = @_;
-	$spaces{$type}++;
+	$spaces{$type}{'usedSpaces'}++;
 }
 
 sub leave {
 	our ($type) = @_;
-	$spaces{$type}--;
+	$spaces{$type}{'usedSpaces'}--;
 #	print Dumper(\%spaces);
 }
 
 sub displayStats {
 #MATH
-	our $vanNum = $vanSpaces - $spaces{'Van'};
-	our $carNum = $carSpaces - $spaces{'Car'};
-	our $bikeNum = $bikeSpaces - $spaces{'Bike'};
+	our $vanNum = $spaces{'Van'}{'totalSpaces'} - $spaces{'Van'}{'usedSpaces'};
+	our $carNum = $spaces{'Car'}{'totalSpaces'} - $spaces{'Car'}{'usedSpaces'};
+	our $bikeNum = $spaces{'Bike'}{'totalSpaces'} - $spaces{'Bike'}{'usedSpaces'};
 
 #UX
 	#print Dumper(\%spaces);
