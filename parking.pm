@@ -5,7 +5,7 @@ use lib ".";
 
 #configuration
 my $vanSpaces = 5;
-my $carSpaces = 5;
+my $carSpaces = 1;
 my $bikeSpaces = 3;
 
 my @allowedWords = (
@@ -31,14 +31,17 @@ our %spaces = (
         }, 
 );
 
-#sub isFull {
-#	our ($type) = @_;
-#	if ($spaces{$type} 
-#}
+sub isFull {
+	our ($type) = @_;
+	if ($spaces{$type}{'totalSpaces'} > $spaces{$type}{'usedSpaces'})
+		{return(0);}
+	else {return(1);}
+}
 
 sub park {
 	our ($type) = @_;
-	$spaces{$type}{'usedSpaces'}++;
+        if (!isFull($type)) {$spaces{$type}{'usedSpaces'}++;}
+        else { print "Our sincere apologies, there are not enough available spaces for you at this time. Please come back later";}
 }
 
 sub leave {
@@ -69,10 +72,16 @@ sub verifyInput {
 	our ($userInput) = @_;
 	my $matched = 0;
 	my $filteredWord;
-	foreach my $word (@allowedWords) {
-		if  ( $userInput =~ /$word/i ) {
-			$matched++;
-			$filteredWord = $word;	
+	while (!$matched) { # using a conditional here is hacky, TODO this needs to be refactored into an eval
+		foreach my $word (@allowedWords) {
+			if  ( $userInput =~ /$word/i ) { # TODO improve regex to match start and end of allowed words to limit bad matches
+				$filteredWord = $word;
+				$matched++;	
+			}
+		}
+		if (!$matched) {
+			print "I'm sorry, I did not recognize that word. Could you try again?\n";
+			$userInput = <>;
 		}
 	}
 	my @done = ($matched, $filteredWord);
